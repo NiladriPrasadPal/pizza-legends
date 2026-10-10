@@ -17,7 +17,7 @@ class Person extends GameObject {
         if (this.movingProgressRemaining > 0) {
             this.updatePosition();
         } else {
-            if (this.isPlayerControlled && state.arrow) {
+            if (!state.map.isCutscenePlaying && this.isPlayerControlled && state.arrow) {
                 this.startBehavior(state, {
                     type: "walk",
                     direction: state.arrow
@@ -32,11 +32,24 @@ class Person extends GameObject {
 
         if (behavior.type === "walk") {
             if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
+                behavior.retry && setTimeout(() => {
+                    this.startBehavior(state, behavior)
+                }, 10);
+
                 return;
             }
 
             state.map.moveWall(this.x, this.y, this.direction);
-            this.movingProgressRemaining = 16
+            this.movingProgressRemaining = 16;
+            this.updateSprite(state);
+        }
+
+        if (behavior.type === "stand") {
+            setTimeout(() => {
+                utils.emitEvent("PersonStandComplete", {
+                    whoId: this.id
+                })
+            }, behavior.time)
         }
     }
 
@@ -44,6 +57,12 @@ class Person extends GameObject {
         const [property, change] = this.directionUpdate[this.direction];
         this[property] += change;
         this.movingProgressRemaining -= 1;
+
+        if (this.movingProgressRemaining === 0) {
+            utils.emitEvent("PersonWalkingComplete", {
+                whoId: this.id
+            })
+        }
     }
 
     updateSprite() {
