@@ -25,7 +25,15 @@ const utils = {
         if (direction === "left") { return "right" }
         if (direction === "right") { return "left" }
         if (direction === "up") { return "down" }
-        return 
+        return "up"
+    },
+
+    wait(ms) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve()
+            }, ms)
+        })
     },
 
     emitEvent(name, detail) {
