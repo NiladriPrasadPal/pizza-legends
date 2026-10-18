@@ -6,20 +6,8 @@ class SubmissionMenu {
     }
 
     decide() {
-        console.log("Caster:", this.caster);
-        console.log("Enemy:", this.enemy);
-        console.log("Actions object:", window.Actions);
-
-        if (!this.caster) {
-            console.error("The caster is undefined!");
-            return;
-        }
-
-        const action = window.Actions[this.caster.actions?.[0]];
-        console.log("Selected action:", action);
-        
         this.onComplete({
-            action,
+            action: Actions[ this.caster.actions[0] ],
             target: this.enemy
         })
     }
