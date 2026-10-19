@@ -65,12 +65,10 @@ class BattleEvent {
     }
 
     submissionMenu(resolve) {
-        console.log("BattleEvent caster:", this.event.caster);
-        console.log("BattleEvent enemy:", this.event.enemy);
-
         const menu = new SubmissionMenu({
             caster: this.event.caster,
             enemy: this.event.enemy,
+            items: this.battle.items,
             onComplete: submission => {
                 resolve(submission)
             }
