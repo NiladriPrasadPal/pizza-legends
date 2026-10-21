@@ -54,6 +54,9 @@ class BattleEvent {
 
         await utils.wait(600)
 
+        this.battle.playerTeam.update();
+        this.battle.enemyTeam.update();
+
         target.pizzaElement.classList.remove("battle-damage-blink");
         
         resolve();
@@ -98,6 +101,9 @@ class BattleEvent {
         this.battle.activeCombatants[replacement.team] = replacement.id;
         replacement.update();
         await utils.wait(400);
+
+        this.battle.playerTeam.update();
+        this.battle.enemyTeam.update();
 
         resolve();
     }
