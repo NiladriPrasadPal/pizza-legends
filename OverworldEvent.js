@@ -69,8 +69,8 @@ class OverworldEvent {
     battle(resolve) {
         const battle = new Battle({
             enemy: Enemies[this.event.enemyId],
-            onComplete: (didwin) => {
-                resolve(didwin ? "WON_BATTLE" : "LOST_BATTLE");
+            onComplete: (didWin) => {
+                resolve(didWin ? "WON_BATTLE" : "LOST_BATTLE");
             }
         })
         battle.init(document.querySelector(".game-container"));
@@ -91,6 +91,16 @@ class OverworldEvent {
     addStoryFlag(resolve) {
         window.playerState.storyFlags[this.event.flag] = true;
         resolve();
+    }
+
+    craftingMenu(resolve) {
+        const menu = new CraftingMenu({
+            pizzas: this.event.pizzas,
+            onComplete: () => {
+                resolve();
+            }
+        })
+        menu.init(document.querySelector(".game-container"))
     }
 
     init() {
