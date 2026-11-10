@@ -65,11 +65,9 @@ class Overworld {
 
         if (heroInitialState) {
             const {hero} = this.map.gameObjects;
-            this.map.removeWall(hero.x, hero.y);
             hero.x = heroInitialState.x;
             hero.y = heroInitialState.y;
             hero.direction = heroInitialState.direction;
-            this.map.addWall(hero.x, hero.y);
         }
 
         this.progress.mapId = mapConfig.id;
@@ -77,15 +75,19 @@ class Overworld {
         this.progress.startingHeroY = this.map.gameObjects.hero.y;
         this.progress.startingHeroDirection = this.map.gameObjects.hero.direction;
 
-        console.log(this.map.walls)
     }
 
-    init() {
+    async init() {
+        const container = document.querySelector(".game-container");
+
         this.progress = new Progress();
+        this.titleScreen = new TitleScreen({
+            progress: this.progress
+        })
+        const useSaveFile = await this.titleScreen.init(container);
 
         let initialHeroState = null;
-        const saveFile = this.progress.getSaveFile();
-        if (saveFile) {
+        if (useSaveFile) {
             this.progress.load();
             initialHeroState = {
                 x: this.progress.startingHeroX,
@@ -95,7 +97,7 @@ class Overworld {
         }
 
         this.hud = new Hud();
-        this.hud.init(document.querySelector(".game-container"));
+        this.hud.init(container);
 
         this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState );
         

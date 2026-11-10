@@ -74,6 +74,7 @@ class OverworldEvent {
     battle(resolve) {
         const battle = new Battle({
             enemy: Enemies[this.event.enemyId],
+            arena: this.event.arena || null,
             onComplete: (didWin) => {
                 resolve(didWin ? "WON_BATTLE" : "LOST_BATTLE");
             }

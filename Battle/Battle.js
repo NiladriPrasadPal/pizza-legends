@@ -1,7 +1,8 @@
 class Battle {
-    constructor({ enemy, onComplete }) {
+    constructor({ enemy, onComplete, arena }) {
         this.enemy = enemy;
         this.onComplete = onComplete;
+        this.arena = arena;
 
         this.combatants = {
             // "player1": new Combatant({
@@ -80,13 +81,17 @@ class Battle {
             isPlayerControlled: team === "player"
         }, this)
 
-        console.log(this)
         this.activeCombatants[team] = this.activeCombatants[team] || id
     }
 
     createElement() {
         this.element = document.createElement("div");
         this.element.classList.add("Battle");
+
+        if (this.arena) {
+            this.element.classList.add(this.arena);
+        }
+
         this.element.innerHTML= (`
             <div class="Battle_hero">
                 <img src="${'/images/characters/people/hero.png'}" alt="Hero" />

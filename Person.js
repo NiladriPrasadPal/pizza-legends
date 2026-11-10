@@ -3,6 +3,7 @@ class Person extends GameObject {
         super(config);
         this.movingProgressRemaining = 0;
         this.isStanding = false;
+        this.intentPosition = null;
 
         this.isPlayerControlled = config.isPlayerControlled || false;
 
@@ -12,6 +13,7 @@ class Person extends GameObject {
             "left": ["x", -1],
             "right": ["x", 1],
         }
+        this.standBehaviorTimeout;
     }
 
     update(state) {
@@ -29,6 +31,10 @@ class Person extends GameObject {
     }
 
     startBehavior(state, behavior) {
+        if (!this.isMounted) {
+            return;
+        }
+
         this.direction = behavior.direction;
 
         if (behavior.type === "walk") {
@@ -40,14 +46,26 @@ class Person extends GameObject {
                 return;
             }
 
-            state.map.moveWall(this.x, this.y, this.direction);
             this.movingProgressRemaining = 16;
+
+            const intentPosition = utils.nextPosition(this.x,this.y,this.direction)
+            this.intentPosition = [
+                intentPosition.x,
+                intentPosition.y,
+            ]
+
             this.updateSprite(state);
         }
 
         if (behavior.type === "stand") {
             this.isStanding = true;
-            setTimeout(() => {
+
+            if (this.standBehaviorTimeout) {
+                clearTimeout(this.standBehaviorTimeout);
+                console.log("clear")
+            }
+
+            this.standBehaviorTimeout = setTimeout(() => {
                 utils.emitEvent("PersonStandComplete", {
                     whoId: this.id
                 })
@@ -62,6 +80,7 @@ class Person extends GameObject {
         this.movingProgressRemaining -= 1;
 
         if (this.movingProgressRemaining === 0) {
+            this.intentPosition = null;
             utils.emitEvent("PersonWalkingComplete", {
                 whoId: this.id
             })
