@@ -91,21 +91,39 @@ class OverworldMap {
         const match = Object.values(this.gameObjects).find(object => {
             return `${object.x},${object.y}` === `${nextCoords.x},${nextCoords.y}`
         });
-        if (!this.isCutscenePlaying && match && match.talking.length) {
+        if (!this.isCutscenePlaying && match && match.talking?.length) {
             const relevantScenario = match.talking.find(scenario => {
-                return (scenario.required || []).every(sf => {
-                    return playerState.storyFlags[sf]
-                })
-            })
-            relevantScenario && this.startCutscene(relevantScenario.events)
+                const required = (scenario.required || []).every(sf => {
+                    return playerState.storyFlags[sf];
+                });
+                const disqualified = (scenario.disqualify || []).some(sf => {    
+                    return playerState.storyFlags[sf];
+                });
+
+                return required && !disqualified;
+            });
+            if (relevantScenario) {
+                this.startCutscene(relevantScenario.events)
+            }
         }
     }
 
     checkForFootstepCutscene() {
         const hero = this.gameObjects["hero"];
-        const match = this.cutsceneSpaces[ `${hero.x},${hero.y}` ];
+        const match = this.cutsceneSpaces[ `${hero.x},${hero.y}`];
         if (!this.isCutscenePlaying && match) {
-            this.startCutscene( match[0].events )
+            const relevantScenario = match.find(scenario => {
+                const required = (scenario.required || []).every(sf => {
+                    return playerState.storyFlags[sf];
+                });
+                const disqualified = (scenario.disqualify || []).some(sf => {
+                    return playerState.storyFlags[sf];
+                });
+                return required && !disqualified;
+            });
+            if (relevantScenario) {
+                this.startCutscene(relevantScenario.events);
+            }
         }
     }
 }
@@ -166,6 +184,37 @@ window.OverworldMaps = {
                     { type: "walk", direction: "down", },
                     { type: "walk", direction: "right", },
                     { type: "walk", direction: "up", },
+                ],
+                talking: [
+                    {
+                        required: ["NPC_C_QUEST_DONE"],
+                        events: [
+                            {
+                                type: "textMessage",
+                                text: "Thanks again for helping me!"
+                            }
+                        ]
+                    },
+                    {
+                        events: [
+                            {
+                                type: "textMessage",
+                                text: "Could you help me with something?"
+                            },
+                            {
+                                type: "textMessage",
+                                text: "Thank you! Here is some XP for you pizza."
+                            },
+                            {
+                                type: "giveXp",
+                                amount: 30
+                            },
+                            {
+                                type: "addStoryFlag",
+                                flag: "NPC_C_QUEST_DONE"
+                            }
+                        ]
+                    }
                 ],
             },
             npcB: {

@@ -100,6 +100,27 @@ class OverworldEvent {
         resolve();
     }
 
+    giveXp(resolve) {
+        const amount = this.event.amount;
+        const pizzaId = this.event.pizzaId || playerState.lineup[0];
+        const pizza = playerState.pizzas[pizzaId];
+
+        if (!pizza) {
+            resolve();
+            return;
+        }
+
+        pizza.xp += amount;
+
+        while (pizza.xp >= pizza.maxXp) {
+            pizza.xp -= pizza.maxXp;
+            pizza.level += 1;
+            pizza.maxHp += 5;
+            pizza.hp = pizza.maxHp;
+        }
+        resolve();
+    }
+
     craftingMenu(resolve) {
         const menu = new CraftingMenu({
             pizzas: this.event.pizzas,

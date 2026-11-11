@@ -145,6 +145,7 @@ class Battle {
                             playerStatePizza.hp = combatant.hp;
                             playerStatePizza.xp = combatant.xp;
                             playerStatePizza.maxXp = combatant.maxXp;
+                            playerStatePizza.maxHp = combatant.maxHp;
                             playerStatePizza.level = combatant.level;
                         }
                     })

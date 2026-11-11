@@ -24,8 +24,11 @@ class BattleEvent {
         let who = this.event.onCaster ? caster : target;
 
         if (damage) {
+            const bonusDamage = (caster.level - 1) * 2;
+            const totalDamage = damage = bonusDamage;
+
             target.update({
-                hp: target.hp - damage
+                hp: target.hp - totalDamage
             })
             target.pizzaElement.classList.add("battle-damage-blink");
         }
@@ -109,25 +112,37 @@ class BattleEvent {
     }
 
     giveXp(resolve) {
-        let amount = this.event.xp;
-        const {combatant} = this.event;
+        const { xp, combatant: target } = this.event; 
+        let amount = 0;
+        
         const step = () => {
-            if (amount > 0) {
-                amount -= 1;
-                combatant.xp += 1;
+            amount += 1;
+            target.xp += 1;
 
-                if (combatant.xp === combatant.maxXp) {
-                    combatant.xp = 0;
-                    combatant.maxXp = 100;
-                    combatant.level += 1;
-                }
+            if (target.xp >= target.maxXp) {
+                target.xp -= target.maxXp;
+                target.maxXp = 100;
+                target.level += 1;
 
-                combatant.update();
+                target.maxHp += 5;
+                target.hp = target.maxHp;
+
+                target.update({
+                    level: target.level,
+                    maxHp: target.maxHp,
+                    hp: target.hp,
+                    xp: target.xp,
+                    maxXp: target.maxXp
+                });
+            }
+
+            if (amount < xp) {
                 requestAnimationFrame(step);
                 return;
             }
+            
             resolve();
-        }
+        };
         requestAnimationFrame(step);
     }
 
