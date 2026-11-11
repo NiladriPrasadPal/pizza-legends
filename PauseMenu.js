@@ -20,6 +20,47 @@ class PauseMenu {
             return [
                 ...lineupPizzas,
                 {
+                    label: "Pizza Collection",
+                    description: "View all discovered and undiscovered pizzas",
+                    handler: () => {
+                        console.log("1. Collection button clicked")
+                        if (window.isBattleActive) {
+                            console.log("2. Battle is active");
+                            return;
+                        }
+
+                        console.log("3. Opening collection");
+                    
+                        this.keyboardMenu.end();
+                        this.element.remove();
+
+                        this.collectionMenu = new CollectionMenu({
+                            onClose: () => {
+                                this.collectionMenu = null;
+
+                                this.createElement();
+                                this.keyboardMenu = new KeyboardMenu({
+                                    descriptionContainer: this.container
+                                });
+
+                                this.keyboardMenu.init(this.element);
+                                this.keyboardMenu.setOptions(this.getOptions("root"));
+
+                                this.container.appendChild(this.element);
+                                this.esc = new KeyPressListener("Escape", () => {
+                                    this.close();
+                                })
+                            }
+                        });
+
+                        console.log("4. Collection object created");
+
+                        this.collectionMenu.init(this.container);
+
+                        console.log("5. Collection initialized");
+                    },
+                },
+                {
                     label: "Save",
                     description: "Save your progress",
                     handler: () => {
@@ -89,6 +130,7 @@ class PauseMenu {
     }
 
     async init(container) {
+        this.container = container;
         this.createElement();
         this.keyboardMenu = new KeyboardMenu({
             descriptionContainer: container
@@ -100,7 +142,11 @@ class PauseMenu {
 
         utils.wait(200);
         this.esc = new KeyPressListener("Escape", () => {
-            this.close();
+            if (this.collectionMenu) {
+                this.collectionMenu.close();
+            } else {
+                this.close();
+            }
         })
     }
 }

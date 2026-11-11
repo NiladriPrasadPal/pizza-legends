@@ -103,6 +103,7 @@ class Battle {
     }
 
     init(container) {
+        window.isBattleActive = true;
         this.createElement();
         container.appendChild(this.element);
 
@@ -134,7 +135,7 @@ class Battle {
             },
         
             onWinner: winner => {
-
+                window.isBattleActive = false;
                 if (winner === "player") {
                     const playerState = window.playerState;
                     Object.keys(playerState.pizzas).forEach(id => {

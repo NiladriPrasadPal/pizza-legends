@@ -31,6 +31,7 @@ body {
 
 .game-container {
     position: relative;
+    overflow: hidden;
     background: #9ae2ff;
     width: 352px;
     height: 198px;

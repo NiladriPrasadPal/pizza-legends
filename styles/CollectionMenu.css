@@ -1,0 +1,146 @@
+.CollectionMenu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background: var(--menu-background);
+    border: 2px solid var(--menu-border-color);
+    color: var(--menu-font-color);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.CollectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--menu-border-color);
+    padding-bottom: 5px;
+    flex-shrink: 0;
+}
+
+.CollectionHeader h2 {
+    font-size: 10px;
+    margin: 0;
+}
+
+.CollectionHeader span {
+    font-size: 7px;
+}
+
+.CollectionClose {
+    font-family: inherit;
+    font-size: 9px;
+    border: 1px solid var(--menu-border-color);
+    background: #fff3b4;
+    cursor: pointer;
+}
+
+.CollectionContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    flex: 1;
+    min-height: 0;
+    padding-top: 5px;
+}
+
+.CollectionGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-content: start;
+    gap: 4px;
+    overflow-y: auto;
+}
+
+.CollectionCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 4px 1px;
+    background: #fff3d5;
+    border: 1px solid var(--menu-border-color);
+    font-family: inherit;
+    color: var(--menu-font-color);
+    cursor: pointer;
+}
+
+.CollectionCard img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.CollectionCard span {
+    font-size: 6px;
+    text-align: center;
+}
+
+.CollectionCard small {
+    font-size: 5px;
+}
+
+.CollectionCard.locked img {
+    opacity: 0.45;
+}
+
+.CollectionCard:hover,
+.CollectionCard:focus {
+    background: var(--menu-selected-background);
+    outline: none;
+}
+
+.CollectionDetails {
+    border-left: 1px solid var(--menu-border-color);
+    padding-left: 6px;
+    overflow-y: auto;
+}
+
+.CollectionDetails img {
+    display: block;
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    margin: 0 auto 4px;
+}
+
+.CollectionDetails h3 {
+    font-size: 9px;
+    text-align: center;
+    margin: 3px 0;
+}
+
+.CollectionDetails h4 {
+    font-size: 7px;
+    margin: 5px 0;
+}
+
+.CollectionDetails p {
+    font-size: 7px;
+    margin: 5px 0;
+}
+
+.CollectionInstance {
+    border-top: 1px solid var(--menu-border-color);
+    padding: 3px 0;
+}
+
+.CollectionXP {
+    height: 4px;
+    background: #b5a58e;
+    margin-top: 3px;
+}
+
+.CollectionXP div {
+    height: 100%;
+    background: #e9a52e;
+}
