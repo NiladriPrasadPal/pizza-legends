@@ -6,37 +6,52 @@ class Overworld {
         this.map = null;
     }
 
-    startGameLoop() {
-        const step = () => {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            const cameraPerson = this.map.gameObjects.hero;
-            
-            Object.values(this.map.gameObjects).forEach(object => {
-                object.update({
-                    arrow: this.directionInput.direction,
-                    map: this.map,
-                })
+    gameLoopStepWork() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        const cameraPerson = this.map.gameObjects.hero;
+        
+        Object.values(this.map.gameObjects).forEach(object => {
+            object.update({
+                arrow: this.directionInput.direction,
+                map: this.map,
             })
-            
-            this.map.drawLowerImage(this.ctx, cameraPerson);
+        })
+        
+        this.map.drawLowerImage(this.ctx, cameraPerson);
 
-            Object.values(this.map.gameObjects).sort((a,b) => {
-                return a.y - b.y;
-            }).forEach(object => {
-                object.sprite.draw(this.ctx, cameraPerson);
-            })
+        Object.values(this.map.gameObjects).sort((a,b) => {
+            return a.y - b.y;
+        }).forEach(object => {
+            object.sprite.draw(this.ctx, cameraPerson);
+        })
 
-            this.map.drawUpperImage(this.ctx, cameraPerson);
-
-            if (!this.map.isPaused) {
-                requestAnimationFrame(() => {
-                    step();
-                })
-            }
-        }
-        step();
+        this.map.drawUpperImage(this.ctx, cameraPerson);
     }
-    
+
+    startGameLoop() {
+
+        let previousMs;
+        const step = 1/60;
+
+        const stepFn = (timestampMs) => {
+            if (this.map.isPaused) {
+                return;
+            }
+            if (previousMs === undefined) {
+                previousMs = timestampMs;
+            }
+            let delta = (timestampMs - previousMs) / 1000;
+            while (delta >= step) {
+                this.gameLoopStepWork();
+                delta -= step;
+            }
+            previousMs = timestampMs - delta * 1000;
+
+            requestAnimationFrame(stepFn)
+        }
+        requestAnimationFrame(stepFn)
+    }
+        
     bindActionInput() {
         new KeyPressListener("Enter", () => {
             this.map.checkForActionCutscene()
