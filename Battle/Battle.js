@@ -1,8 +1,9 @@
 class Battle {
-    constructor({ enemy, onComplete, arena }) {
+    constructor({ enemy, onComplete, arena, questBattle }) {
         this.enemy = enemy;
         this.onComplete = onComplete;
         this.arena = arena;
+        this.questBattle = questBattle;
 
         this.combatants = {
             // "player1": new Combatant({
@@ -137,6 +138,18 @@ class Battle {
             onWinner: winner => {
                 window.isBattleActive = false;
                 if (winner === "player") {
+                    if (this.questBattle &&
+                        window.playerState.storyFlags.STREET_QUEST_STARTED &&
+                        !window.playerState.storyFlags.STREET_QUEST_CLAIMED) {
+                            const flags = window.playerState.storyFlags;
+
+                            flags.STREET_QUEST_WINS = (flags.STREET_QUEST_WINS || 0) + 1;
+
+                            if (flags.STREET_QUEST_WINS >= 3) {
+                                flags.STREET_QUEST_READY = true;
+                            }
+                        }
+                        
                     const playerState = window.playerState;
                     Object.keys(playerState.pizzas).forEach(id => {
                         const playerStatePizza = playerState.pizzas[id];

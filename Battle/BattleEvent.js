@@ -25,7 +25,7 @@ class BattleEvent {
 
         if (damage) {
             const bonusDamage = (caster.level - 1) * 2;
-            const totalDamage = damage = bonusDamage;
+            const totalDamage = damage + bonusDamage;
 
             target.update({
                 hp: target.hp - totalDamage

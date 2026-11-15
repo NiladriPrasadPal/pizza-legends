@@ -478,10 +478,83 @@ window.OverworldMaps = {
                     {
                         events: [
                             { type: "textMessage", text: "You should have just stayed home!", faceHero: "streetNpcC" },
-                            { type: "battle", enemyId: "streetBattle" },
+                            { type: "battle", enemyId: "streetBattle", questBattle: true },
                             { type: "addStoryFlag", flag: "streetBattle" },
                         ]
                     },
+                ]
+            },
+            streetNpcD: {
+                type: "Person",
+                x: utils.withGrid(14),
+                y: utils.withGrid(11),
+                src: "/images/characters/people/npc4.png",
+                behaviorLoop: [
+                    { type: "stand", direction: "down", time: 800 },
+                    { type: "stand", direction: "left", time: 800 },
+                    { type: "stand", direction: "right", time: 800 },
+                ],
+
+                talking: [
+                    {
+                        required: ["STREET_QUEST_CLAIMED"],
+                        events: [
+                            {
+                                type: "textMessage",
+                                text: "Thanks again! You're a legendary pizza chef!"
+                            }
+                        ]
+                    },
+                    {
+                        required: ["STREET_QUEST_READY"],
+                        events: [
+                            {
+                                type: "textMessage",
+                                text: "Incredible! You defeated three opponents!"
+                            },
+                            {
+                                type: "textMessage",
+                                text: "Here, take 50 XP for your help!"
+                            },
+                            {
+                                type: "giveXp",
+                                amount: 50
+                            },
+                            {
+                                type: "addStoryFlag",
+                                flag: "STREET_QUEST_CLAIMED"
+                            }
+                        ]
+                    },
+                    {
+                        required: ["STREET_QUEST_STARTED"],
+                        events: [
+                            {
+                                type:  "textMessage",
+                                text: "How is the challenge going? Defeat three opponents!"
+                            }
+                        ]
+                    },
+                    {
+                        events: [
+                            {
+                                type: "textMessage",
+                                text: "Hey! I have a challenge for you."
+                            },
+                            {
+                                type: "textMessage",
+                                text: "Defeat three opponents around town."
+                            },
+                            {
+                                type: "textMessage",
+                                text: "Come back when you're done. I'll reward you!"
+                            },
+                            {
+                                type: "addStoryFlag",
+                                flag: "STREET_QUEST_STARTED"
+                            }
+                        ]
+                    }
                 ]
             },
         },
@@ -872,7 +945,7 @@ window.OverworldMaps = {
                     {
                         events: [
                             { type: "textMessage", text: "This is my turf!", faceHero: "streetNorthNpcC" },
-                            { type: "battle", enemyId: "streetNorthBattle" },
+                            { type: "battle", enemyId: "streetNorthBattle", questBattle: true },
                             { type: "addStoryFlag", flag: "streetNorthBattle" },
                         ]
                     },
@@ -996,7 +1069,7 @@ window.OverworldMaps = {
                     {
                         events: [
                             { type: "textMessage", text: "You think you have what it takes to cook here?!", faceHero: "diningRoomNpcA" },
-                            { type: "battle", enemyId: "diningRoomBattle", arena: "dining-room" },
+                            { type: "battle", enemyId: "diningRoomBattle", arena: "dining-room", questBattle: true },
                             { type: "addStoryFlag", flag: "diningRoomBattle" },
                         ]
                     },

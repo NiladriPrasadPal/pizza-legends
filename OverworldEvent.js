@@ -75,6 +75,7 @@ class OverworldEvent {
         const battle = new Battle({
             enemy: Enemies[this.event.enemyId],
             arena: this.event.arena || null,
+            questBattle: this.event.questBattle || false,
             onComplete: (didWin) => {
                 resolve(didWin ? "WON_BATTLE" : "LOST_BATTLE");
             }
@@ -118,6 +119,7 @@ class OverworldEvent {
             pizza.maxHp += 5;
             pizza.hp = pizza.maxHp;
         }
+        utils.emitEvent("PlayerStateUpdated")
         resolve();
     }
 
