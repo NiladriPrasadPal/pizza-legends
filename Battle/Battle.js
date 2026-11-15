@@ -105,6 +105,7 @@ class Battle {
 
     init(container) {
         window.isBattleActive = true;
+        utils.emitEvent("PlayerStateUpdated");
         this.createElement();
         container.appendChild(this.element);
 
@@ -137,6 +138,7 @@ class Battle {
         
             onWinner: winner => {
                 window.isBattleActive = false;
+                utils.emitEvent("PlayerStateUpdated");
                 if (winner === "player") {
                     if (this.questBattle &&
                         window.playerState.storyFlags.STREET_QUEST_STARTED &&
@@ -149,7 +151,7 @@ class Battle {
                                 flags.STREET_QUEST_READY = true;
                             }
                         }
-                        
+
                     const playerState = window.playerState;
                     Object.keys(playerState.pizzas).forEach(id => {
                         const playerStatePizza = playerState.pizzas[id];

@@ -57,18 +57,30 @@ class OverworldEvent {
 
     changeMap(resolve) {
         const sceneTransition = new SceneTransition();
+        const hud = this.map.overworld.hud;
 
-        sceneTransition.init(document.querySelector(".game-container"), () => {
-            this.map.overworld.startMap( window.OverworldMaps[this.event.map],
-            {
-                x: this.event.x,
-                y: this.event.y,
-                direction: this.event.direction,
+        if (hud && hud.questElement) {
+            hud.questElement.classList.add("fade-out");
+        }
+
+        setTimeout(() => {
+            sceneTransition.init(document.querySelector(".game-container"), () => {
+                this.map.overworld.startMap(
+                    window.OverworldMaps[this.event.map],
+                    {
+                        x: this.event.x,
+                        y: this.event.y,
+                        direction: this.event.direction,
+                    }
+                );
+                if (hud && hud.questElement) {
+                    hud.questElement.classList.remove("fade-out");
+                }
+            
+                resolve();
+                sceneTransition.fadeOut();    
             });
-            resolve();
-
-            sceneTransition.fadeOut();
-        })
+        }, 600);
     }
 
     battle(resolve) {
@@ -98,6 +110,7 @@ class OverworldEvent {
 
     addStoryFlag(resolve) {
         window.playerState.storyFlags[this.event.flag] = true;
+        utils.emitEvent("PlayerStateUpdated");
         resolve();
     }
 

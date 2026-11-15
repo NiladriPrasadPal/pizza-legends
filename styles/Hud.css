@@ -13,3 +13,42 @@
 .Hud .Combatant_type {
     display: none;
 }
+
+.QuestTracker {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 115px;
+    padding: 7px;
+    background: var(--menu-background);
+    border: 2px solid var(--menu-border-color);
+    border-left: none;
+    color: var(--menu-font-color);
+    font-family: inherit;
+    font-size: 7px;
+    line-height: 1.7;
+    z-index: 10;
+    image-rendering: pixelated;
+    transition: opacity 0.6 ease;
+}
+
+.QuestTracker.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.QuestTracker_title {
+    color: var(--menu-font-color);
+    font-size: 8px;
+    text-align: center;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--menu-border-color);
+}
+
+.QuestTracker_text {
+    color: var(--menu-font-color);
+    font-size: 7px;
+    text-align: center;
+}

@@ -808,7 +808,7 @@ window.OverworldMaps = {
                     {
                         events: [
                             { type: "textMessage", text: "Veggies are the fuel for the heart and soul!", faceHero: "greenKitchenNpcC" },
-                            { type: "battle", enemyId: "chefRootie", arena: "green-kitchen" },
+                            { type: "battle", enemyId: "chefRootie", arena: "green-kitchen", questBattle: true },
                             { type: "addStoryFlag", flag: "chefRootie"},
                         ]
                     }
